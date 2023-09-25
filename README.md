@@ -7,7 +7,7 @@
 
 # Teslo API
 
-1. Levantar la base de datos
+1. Clonar el proyecto
 
 ```
 docker-compose up -d
@@ -19,4 +19,11 @@ docker-compose up -d
 npm install
 ```
 
-3. Clonar el archivo **.env.template**
+3. Clonar el archivo **.env.template** y renombrarlo a **.env**
+
+4. Cambiar las variables de entorno
+
+5. Levantar la base de datos
+```
+docker-compose up -d
+```
