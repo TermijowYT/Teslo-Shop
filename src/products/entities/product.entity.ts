@@ -1,26 +1,28 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id: string;
 
-    @Column('text', {unique: true,})
+    @Column('text', {
+        unique: true,
+    })
     title: string;
 
-    @Column('numeric', {
-        default: 0,
+    @Column('float',{
+        default: 0
     })
     price: number;
 
     @Column({
         type: 'text',
-        nullable: true,
+        nullable: true
     })
     description: string;
 
     @Column('text', {
-        unique: true,
+        unique: true
     })
     slug: string;
 
@@ -29,8 +31,8 @@ export class Product {
     })
     stock: number;
 
-    @Column('text', {
-        array: true,
+    @Column('text',{
+        array: true
     })
     sizes: string[];
 
@@ -39,4 +41,15 @@ export class Product {
 
     //tags
     //images
+
+    @BeforeInsert()
+    checkSlugInsert() {
+        if (!this.slug) {
+            this.slug = this.title;
+          }
+        this.slug = this.slug
+        .toLowerCase()
+        .replaceAll(' ' , '_')
+        .replaceAll("'" , '')
+    }
 }
