@@ -8,21 +8,34 @@ import { Auth, GetUser, RawHeaders } from './decorators';
 import { UserRoleGuard } from './guards/user-role.guard';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { validRoles } from './interfaces';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 
 
+@ApiTags('Auth')
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @ApiResponse({status: 201, description: 'User was created', type: User})
+  @ApiResponse({status: 400, description: 'Missing Parameter or repeated email', type: User})
+
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
   }
   @Post('login')
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @Get('check-auth-status')
+  @Auth()
+  checkAuthStatus(
+    @GetUser() user: User
+  ) {
+    return this.authService.checkAuthStatus(user)
   }
 
   @Get('private')
